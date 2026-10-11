@@ -1,0 +1,6 @@
+{
+  "name": "AETHER-0 Borderless Emergency Handoff Router",
+  "description": "Zero-retention, borderless emergency telemetry router that encrypts, verifies, and hands off mission-critical telemetry across disparate isolated network nodes with guaranteed volatile-only memory and immediate zeroization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
