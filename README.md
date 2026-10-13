@@ -86,13 +86,25 @@ Matching Python helper available in `tools/evidence_core_manifest.py`.
 
 ---
 
+## Extended Tooling & Documentation
+
+Detailed design specifications and downstream integration guides:
+- **[Evidence Core Integration Guide](docs/EVIDENCE_CORE_INTEGRATION.md)**: Full schema contracts, `GROUNDING.md` compliance, Python intake examples, and batch manifest generation.
+- **[Encrypted Cold-Vault Export Design](docs/COLD_VAULT_DESIGN.md)**: Air-gapped `age` container specification, zero personal content invariants, and duress key zeroization path.
+- **[Profile-Driven Guided Flow Sketches](docs/PROFILE_HELPERS_SKETCH.md)**: Florida E-Portal packet template and DS-5507 consular jurat workflow designs.
+- **[Automated CI Workflow](.github/workflows/adapter-tests.yml)**: Continuous integration configuration running all three test suites and the Python manifest helper on push/PR to `main`.
+
+---
+
 ## Running Tests
 
-Verify all Evidence Core contracts, Grounding Validators, and Batch Manifest rules:
+Verify all Evidence Core contracts, Grounding Validators, Batch Manifest rules, and Python helpers:
 ```bash
 npm test
+python3 tools/evidence_core_manifest.py
 ```
 Test suites executed:
 - `evidenceCoreAdapter.test.ts`: Filename formatting, draft approval status, string scopes, canonical SHA-256.
 - `groundingValidator.test.ts`: Rejection of unapproved artifacts and enforcement of `[UNREFERENCED]`.
 - `manifestGenerator.test.ts`: Manifest structure and refusal of draft artifacts.
+- `evidence_core_manifest.py`: Python manifest generator execution and contract assertions.

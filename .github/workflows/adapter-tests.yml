@@ -19,8 +19,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Run Evidence Core adapter tests
+      - name: Run Evidence Core adapter & validator test suites (TypeScript)
         run: npm test
+
+      - name: Run Evidence Core manifest helper tests (Python)
+        run: python3 tools/evidence_core_manifest.py
