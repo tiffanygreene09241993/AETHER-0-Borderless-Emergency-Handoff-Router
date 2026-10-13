@@ -1,5 +1,7 @@
 # AETHER-0 // Borderless Emergency Handoff Router
 
+[![Evidence Core Adapter Tests](https://github.com/tiffanygreene09241993/AETHER-0-Borderless-Emergency-Handoff-Router/actions/workflows/adapter-tests.yml/badge.svg)](https://github.com/tiffanygreene09241993/AETHER-0-Borderless-Emergency-Handoff-Router/actions/workflows/adapter-tests.yml)
+
 A mission-critical, zero-retention emergency telemetry and handoff router engineered for protective parents, domestic violence survivors, and individuals facing cross-border abandonment or jurisdictional warfare.
 
 ---
@@ -46,16 +48,25 @@ AETHER-0 adheres to the shared Evidence Core contracts defined in [psychedge-cor
 
 ### Downstream Intake Example
 ```python
+from pathlib import Path
+import json
 from tools.evidence_core.evidence_core import EvidenceCore
 
-core = EvidenceCore(case_dir="./cases/2026-0491")
+core = EvidenceCore(Path("./case_store"))
 
-# Intake artifact from AETHER-0
-core.intake("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json")
+# Load the Event Certificate JSON emitted by AETHER-0
+with open("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json") as f:
+    meta = json.load(f)
+meta["filename"] = "CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json"
 
-# Mandatory Human Review Gate before AI citation
-core.set_approval("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json", "approved")
+# Intake (starts as draft)
+art = core.intake(meta)
+
+# Mandatory human review before any citation
+core.set_approval(meta["filename"], "approved")
 ```
+
+See [docs/EVIDENCE_CORE_INTEGRATION.md](docs/EVIDENCE_CORE_INTEGRATION.md) for the full contract and multi-jurisdictional details.
 
 ---
 
@@ -66,3 +77,5 @@ Verify Evidence Core adapter contracts and hashing:
 npm test
 ```
 All unit tests validate filename matching, draft status invariants, string-typed scope fields, and 64-character lowercase hex SHA-256 digests.
+
+CI runs the suite automatically on every push and pull request to `main`.
