@@ -91,21 +91,32 @@ AETHER-0 supports runtime-swappable profiles to dynamically adapt handoff teleme
 
 ## 4. Downstream Intake Example (`evidence_core.py`)
 
-Downstream tools intake AETHER-0 Event Certificates with a single Python command:
+The Python Evidence Core expects a store path and an artifact metadata dict.  
+AETHER emits a JSON file whose contents become that dict.
 
 ```python
+from pathlib import Path
+import json
 from tools.evidence_core.evidence_core import EvidenceCore
 
-core = EvidenceCore(case_dir="/path/to/case")
+core = EvidenceCore(Path("./case_store"))
 
-# 1. Intake the draft Event Certificate emitted by AETHER-0
-artifact_path = core.intake("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json")
+# 1. Load the Event Certificate JSON emitted by AETHER-0
+with open("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json") as f:
+    meta = json.load(f)
 
-# 2. Human approval gate (mandatory before AI citation)
-core.set_approval("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json", "approved")
+# Ensure the filename field is present for intake
+meta["filename"] = "CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json"
 
-# 3. Downstream AI agents (Forensic Dossier, MindPal) can now cite the approved certificate
-approved_inventory = core.get_approved_inventory()
+# 2. Intake (starts as draft; content bytes optional)
+art = core.intake(meta)
+print(art["approval"]["status"])  # draft
+
+# 3. Human approval gate (mandatory before AI citation)
+core.set_approval(meta["filename"], "approved")
+
+# 4. Downstream agents may now cite it
+inventory = core.get_approved_inventory("CASE2026_SYNTH_0491")
 ```
 
 ---
