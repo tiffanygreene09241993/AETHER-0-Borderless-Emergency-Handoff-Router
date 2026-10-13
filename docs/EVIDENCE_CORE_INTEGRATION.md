@@ -84,48 +84,79 @@ AETHER-0 supports runtime-swappable profiles to dynamically adapt handoff teleme
 
 2. **`CROSS_BORDER_MX_US` (Transnational Cross-Border)**:
    - **Context**: Cross-border abandonment or international child abduction risk.
-   - **Governing Law**: 1980 Hague Convention Article 13(b) (Grave Risk of Harm), 22 U.S.C. §§ 9001–9011 (ICARA), U.S. State Dept. 7 FAM 1700 (Victims of Crime Abroad), Form DS-5507.
+   - **Governing Law**: 1980 Hague Convention Article 13(b) (Grave Risk Defense), 22 U.S.C. §§ 9001–9011 (ICARA), U.S. State Dept. 7 FAM 1700 (Victims of Crime Abroad), Form DS-5507.
    - **Handoff Protocol**: `EMBASSY_ACS_CONSULAR_ESCORT`.
 
 ---
 
 ## 4. Downstream Intake Example (`evidence_core.py`)
 
-The Python Evidence Core expects a store path and an artifact metadata dict.  
-AETHER emits a JSON file whose contents become that dict.
+Downstream tools intake AETHER-0 Event Certificates with standard Evidence Core commands:
 
 ```python
-from pathlib import Path
-import json
 from tools.evidence_core.evidence_core import EvidenceCore
 
-core = EvidenceCore(Path("./case_store"))
+core = EvidenceCore(case_dir="/path/to/case")
 
-# 1. Load the Event Certificate JSON emitted by AETHER-0
-with open("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json") as f:
-    meta = json.load(f)
+# 1. Intake the draft Event Certificate emitted by AETHER-0
+artifact_path = core.intake("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json")
 
-# Ensure the filename field is present for intake
-meta["filename"] = "CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json"
+# 2. Human approval gate (mandatory before AI citation)
+core.set_approval("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json", "approved")
 
-# 2. Intake (starts as draft; content bytes optional)
-art = core.intake(meta)
-print(art["approval"]["status"])  # draft
-
-# 3. Human approval gate (mandatory before AI citation)
-core.set_approval(meta["filename"], "approved")
-
-# 4. Downstream agents may now cite it
-inventory = core.get_approved_inventory("CASE2026_SYNTH_0491")
+# 3. Downstream AI agents (Forensic Dossier, MindPal) can now cite the approved certificate
+approved_inventory = core.get_approved_inventory()
 ```
 
 ---
 
-## 5. Verification & Testing
+## 5. Downstream Agent Validation Sandbox (`GROUNDING.md`)
 
-Run the adapter test suite locally:
+A validation harness (`src/services/groundingValidator.ts`) is provided to verify agent outputs against an approved inventory:
+
+```typescript
+import { validateAgentGrounding } from './services/groundingValidator';
+
+const report = validateAgentGrounding(agentDraftText, approvedInventory);
+if (!report.passed) {
+  console.error("Contract violations found:", report.issues);
+  // Flags unapproved citations and uncited assertions lacking [UNREFERENCED]
+}
+```
+
+---
+
+## 6. Batch Manifest Generator (`manifest.json`)
+
+To aggregate multiple approved Event Certificates into an inventory manifest:
+
+### TypeScript
+```typescript
+import { generateBatchManifest, serializeManifestJson } from './services/manifestGenerator';
+
+// Refuses any artifact not in 'approved' status
+const manifest = generateBatchManifest("CASE2026_SYNTH_0491", approvedArtifactsList);
+const manifestJson = serializeManifestJson(manifest);
+```
+
+### Python
+```python
+from tools.evidence_core_manifest import generate_batch_manifest, write_manifest_file
+
+manifest = generate_batch_manifest("CASE2026_SYNTH_0491", approved_artifacts_list)
+write_manifest_file(manifest, "manifest.json")
+```
+
+---
+
+## 7. Verification & Testing
+
+Run all contract and validation test suites:
 
 ```bash
 npm test
 ```
-Asserts strict compliance with filename regex, draft status, string-typed `proves`/`does_not_prove`, and canonical SHA-256 calculation.
+Tests:
+- `evidenceCoreAdapter.test.ts`: Filename patterns, draft status, string-typed scopes, canonical SHA-256.
+- `groundingValidator.test.ts`: Rejection of unapproved artifacts and enforcement of `[UNREFERENCED]`.
+- `manifestGenerator.test.ts`: Batch manifest packaging and refusal of unapproved artifacts.

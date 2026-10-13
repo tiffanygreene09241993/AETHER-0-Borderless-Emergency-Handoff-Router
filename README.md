@@ -1,7 +1,5 @@
 # AETHER-0 // Borderless Emergency Handoff Router
 
-[![Evidence Core Adapter Tests](https://github.com/tiffanygreene09241993/AETHER-0-Borderless-Emergency-Handoff-Router/actions/workflows/adapter-tests.yml/badge.svg)](https://github.com/tiffanygreene09241993/AETHER-0-Borderless-Emergency-Handoff-Router/actions/workflows/adapter-tests.yml)
-
 A mission-critical, zero-retention emergency telemetry and handoff router engineered for protective parents, domestic violence survivors, and individuals facing cross-border abandonment or jurisdictional warfare.
 
 ---
@@ -13,6 +11,9 @@ A mission-critical, zero-retention emergency telemetry and handoff router engine
 - **Panic Shred Engine**: One-click, multi-pass memory wipe permanently scrubbing all temporary buffers, cryptographic handles, and active session keys.
 - **Runtime-Swappable `JurisdictionProfile` Pattern**: Dynamically adapts legal routing parameters, statutory frameworks (UCCJEA, VAWA, Hague Convention, 7 FAM 1700), and handoff protocols to interstate and international situations.
 - **PsychEdge Evidence Core Contract Compatibility**: Emits tamper-evident Event Certificates (`[CaseID]_AETHER_EventCert_[YYYY-MM-DD]_v[N].json`) formatted for direct intake into downstream forensic tools.
+- **Downstream Agent Validation Sandbox**: Local testing harness validating that reasoning agents cite only approved artifacts and mark ungrounded assertions strictly as `[UNREFERENCED]` per `GROUNDING.md`.
+- **Batch Manifest Generator**: Aggregates approved Event Certificates into an Evidence Core `manifest.json`, strictly refusing any unapproved or draft artifacts.
+- **Cold-Vault Transit Export (Design + Stub)**: Cryptographic export path to an encrypted container (`age` X25519) with automated duress key zeroization.
 
 ---
 
@@ -48,34 +49,50 @@ AETHER-0 adheres to the shared Evidence Core contracts defined in [psychedge-cor
 
 ### Downstream Intake Example
 ```python
-from pathlib import Path
-import json
 from tools.evidence_core.evidence_core import EvidenceCore
 
-core = EvidenceCore(Path("./case_store"))
+core = EvidenceCore(case_dir="./cases/2026-0491")
 
-# Load the Event Certificate JSON emitted by AETHER-0
-with open("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json") as f:
-    meta = json.load(f)
-meta["filename"] = "CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json"
+# Intake artifact from AETHER-0
+core.intake("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json")
 
-# Intake (starts as draft)
-art = core.intake(meta)
-
-# Mandatory human review before any citation
-core.set_approval(meta["filename"], "approved")
+# Mandatory Human Review Gate before AI citation
+core.set_approval("CASE2026_SYNTH_0491_AETHER_EventCert_2026-10-13_v1.json", "approved")
 ```
 
-See [docs/EVIDENCE_CORE_INTEGRATION.md](docs/EVIDENCE_CORE_INTEGRATION.md) for the full contract and multi-jurisdictional details.
+---
+
+## Validation Sandbox & Batch Manifest
+
+### Validating Downstream Agent Outputs
+```typescript
+import { validateAgentGrounding } from './src/services/groundingValidator';
+
+const report = validateAgentGrounding(agentDraftText, approvedInventoryFilenames);
+if (!report.passed) {
+  console.error("Grounding contract violations:", report.issues);
+}
+```
+
+### Generating Batch Manifest (`manifest.json`)
+```typescript
+import { generateBatchManifest } from './src/services/manifestGenerator';
+
+// Throws error if any artifact is in 'draft' or 'rejected' status
+const manifest = generateBatchManifest("CASE2026_SYNTH_0491", approvedArtifacts);
+```
+
+Matching Python helper available in `tools/evidence_core_manifest.py`.
 
 ---
 
 ## Running Tests
 
-Verify Evidence Core adapter contracts and hashing:
+Verify all Evidence Core contracts, Grounding Validators, and Batch Manifest rules:
 ```bash
 npm test
 ```
-All unit tests validate filename matching, draft status invariants, string-typed scope fields, and 64-character lowercase hex SHA-256 digests.
-
-CI runs the suite automatically on every push and pull request to `main`.
+Test suites executed:
+- `evidenceCoreAdapter.test.ts`: Filename formatting, draft approval status, string scopes, canonical SHA-256.
+- `groundingValidator.test.ts`: Rejection of unapproved artifacts and enforcement of `[UNREFERENCED]`.
+- `manifestGenerator.test.ts`: Manifest structure and refusal of draft artifacts.
