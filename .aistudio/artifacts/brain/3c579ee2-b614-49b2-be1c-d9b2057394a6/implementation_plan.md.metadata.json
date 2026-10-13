@@ -1,6 +1,6 @@
 {
-  "summary":  "Updated architectural implementation plan embedding the exact two-part Sovereign Armor (zero-retention air-gapped PWA, SHA-256 chain-of-custody tamper ledger, and Duress PIN) and Structural Sword (Rebuttable Presumption of Coerced Compliance statute, Archival Record Firewalls with void ab initio liability, and Institutional Red-Teaming audits across family courts, universities, and consular bodies).",
-  "updatedAt":  "2026-10-04T17:23:52.021928885Z",
-  "requestFeedback":  true,
-  "userFacing":  true
+  "summary": "Approved implementation plan updated with exact Evidence Core string-type proves/does_not_prove fields, canonical SHA-256 computation over non-personal fields, approval structure {status: 'draft', approved_at: null, audit_id: null}, strict filename pattern [CaseID]_AETHER_EventCert_[YYYY-MM-DD]_v[N].json, and step-by-step deliverables.",
+  "updatedAt": "2026-10-13T08:43:08.163955889Z",
+  "requestFeedback": true,
+  "userFacing": true
 }

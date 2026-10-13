@@ -448,7 +448,7 @@ export const UCCJEA_STATES_DATA: Record<string, StateUccjeaData> = {
     riskScore: 96,
     emergencyPickupHazard: 'EXTREME',
     mandatoryRecording110: true,
-    dvImmunityNicholson: true,
+    dvProtectiveStandards: true,
     isTransnational: true,
     consularProtocol: 'U.S. Embassy Santo Domingo ACS Consular Unit',
     summaryTrap: 'Abusive spouse strand victim during island travel, liquidating marital funds and securing default orders in Florida or New York family court without valid Hague Convention service.',

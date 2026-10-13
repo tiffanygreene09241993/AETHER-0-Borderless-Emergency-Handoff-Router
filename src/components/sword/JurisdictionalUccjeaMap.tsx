@@ -29,7 +29,22 @@ import {
   Plane,
   Anchor,
   AlertOctagon,
+  FileCode,
+  Download,
+  Copy,
+  X,
 } from 'lucide-react';
+import {
+  createEvidenceCoreEventCert,
+  formatEvidenceCoreFilename,
+  serializeToMarkdown,
+  downloadArtifactFile,
+} from '../../services/evidenceCoreAdapter.ts';
+import {
+  EvidenceCoreEventCert,
+  US_INTERSTATE_FL_NV,
+  CROSS_BORDER_MX_US,
+} from '../../types/jurisdictionProfile.ts';
 
 interface JurisdictionalUccjeaMapProps {
   onSelectPleadingPreset?: (presetId: string) => void;
@@ -53,12 +68,45 @@ export const JurisdictionalUccjeaMap: React.FC<JurisdictionalUccjeaMapProps> = (
   const [biometricAttestationHash, setBiometricAttestationHash] = useState<string | null>(null);
   const [isBiometricScanning, setIsBiometricScanning] = useState<boolean>(false);
 
+  // Evidence Core Export State
+  const [evidenceCoreCert, setEvidenceCoreCert] = useState<EvidenceCoreEventCert | null>(null);
+  const [showEvidenceCoreModal, setShowEvidenceCoreModal] = useState<boolean>(false);
+  const [certModalTab, setCertModalTab] = useState<'json' | 'markdown' | 'intake'>('json');
+  const [copiedArtifact, setCopiedArtifact] = useState<boolean>(false);
+
   const homeState = UCCJEA_STATES_DATA[homeStateCode] || UCCJEA_STATES_DATA[DEFAULT_HOME_STATE];
   const currentState = UCCJEA_STATES_DATA[currentStateCode] || UCCJEA_STATES_DATA[DEFAULT_CURRENT_STATE];
   const adverseState = UCCJEA_STATES_DATA[adverseStateCode] || UCCJEA_STATES_DATA[DEFAULT_ADVERSE_STATE];
   const activeInspectorState = UCCJEA_STATES_DATA[selectedStateCode] || currentState;
 
   const isTransnationalStranded = currentState.riskTier === 'TRANSNATIONAL_STRANDING' || !!currentState.isTransnational;
+
+  const handleExportRouteEventCert = async () => {
+    const profile = isTransnationalStranded ? CROSS_BORDER_MX_US : US_INTERSTATE_FL_NV;
+    const eventType = isTransnationalStranded
+      ? 'TRANSNATIONAL_STRANDING_DETECTED'
+      : 'INTERSTATE_UCCJEA_ROUTE_VERIFIED';
+    const label = isTransnationalStranded
+      ? `Transnational stranding detected in ${currentState.name} under 7 FAM 1700 & Hague Art. 13(b)`
+      : `Interstate custody route verified: Home State ${homeState.name} (${homeStateCode}) to Current ${currentState.name} (${currentStateCode})`;
+
+    const cert = await createEvidenceCoreEventCert({
+      caseId: 'CASE2026_SYNTH_0491',
+      eventType,
+      label,
+      profile,
+      timestamp: Date.now(),
+      proves: isTransnationalStranded
+        ? `Cryptographic recording of foreign stranding in ${currentState.name} invoking UCCJEA § 208 misconduct bar`
+        : `Cryptographic verification of UCCJEA § 201 home-state primacy in ${homeState.name} against ${adverseState.name} forum`,
+      does_not_prove:
+        'Does not prove physical whereabouts of adverse party, private communications, or a final judicial decree',
+    });
+
+    setEvidenceCoreCert(cert);
+    setShowEvidenceCoreModal(true);
+  };
+
   const isHighRiskTrap = currentState.riskTier === 'HIGH_RISK_TRAP';
   const isCurrentStateHazard = isHighRiskTrap || isTransnationalStranded;
 
@@ -560,6 +608,14 @@ export const JurisdictionalUccjeaMap: React.FC<JurisdictionalUccjeaMapProps> = (
           </button>
 
           <button
+            onClick={handleExportRouteEventCert}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors border cursor-pointer font-bold bg-purple-950/80 border-purple-700 text-purple-200 hover:bg-purple-900"
+          >
+            <FileCode className="w-3.5 h-3.5 text-purple-400" />
+            <span>EMIT EVIDENCE CORE EVENTCERT</span>
+          </button>
+
+          <button
             onClick={handleBiometricSeal}
             disabled={isBiometricScanning}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors border cursor-pointer font-bold ${
@@ -902,6 +958,189 @@ export const JurisdictionalUccjeaMap: React.FC<JurisdictionalUccjeaMapProps> = (
           <p>{activeInspectorState.tacticalMitigation}</p>
         </div>
       </div>
+
+      {/* Evidence Core Export Modal */}
+      {showEvidenceCoreModal && evidenceCoreCert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div className="w-full max-w-3xl bg-[#090e1a] border border-purple-700/80 rounded-xl p-5 text-xs font-mono shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <FileCode className="w-4 h-4 text-purple-400" />
+                <span className="font-semibold text-slate-100 text-sm">
+                  EVIDENCE CORE JURISDICTIONAL EVENT CERTIFICATE
+                </span>
+                <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 text-[10px] font-bold">
+                  STATUS: {evidenceCoreCert.approval.status.toUpperCase()}
+                </span>
+              </div>
+              <button
+                onClick={() => setShowEvidenceCoreModal(false)}
+                className="text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-3 mb-3 rounded bg-[#05070d] border border-slate-800 space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-[11px]">
+                  <span className="text-slate-400">ARTIFACT FILENAME:</span>
+                  <span className="text-cyan-300 font-bold select-all">
+                    {formatEvidenceCoreFilename(evidenceCoreCert.case_id, evidenceCoreCert.utc_timestamp, evidenceCoreCert.version, 'json')}
+                  </span>
+                </div>
+                <span className="text-emerald-400 text-[10px] font-bold">
+                  personal_content_stored: false
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10px] pt-1 border-t border-slate-800/80 text-slate-300">
+                <div>
+                  <span className="text-slate-500">PROVES: </span>
+                  <span className="text-slate-200">{evidenceCoreCert.proves}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500">DOES NOT PROVE: </span>
+                  <span className="text-slate-200">{evidenceCoreCert.does_not_prove}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 pb-2 mb-2 border-b border-slate-800 text-[11px]">
+              <button
+                onClick={() => setCertModalTab('json')}
+                className={`px-3 py-1 rounded transition-colors ${
+                  certModalTab === 'json'
+                    ? 'bg-purple-950 text-purple-300 font-bold border border-purple-700'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Evidence Core JSON
+              </button>
+              <button
+                onClick={() => setCertModalTab('markdown')}
+                className={`px-3 py-1 rounded transition-colors ${
+                  certModalTab === 'markdown'
+                    ? 'bg-purple-950 text-purple-300 font-bold border border-purple-700'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Markdown + YAML Front-Matter
+              </button>
+              <button
+                onClick={() => setCertModalTab('intake')}
+                className={`px-3 py-1 rounded transition-colors ${
+                  certModalTab === 'intake'
+                    ? 'bg-purple-950 text-purple-300 font-bold border border-purple-700'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Downstream Intake & GROUNDING.md
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 bg-[#05070d] rounded border border-slate-800 text-slate-300 leading-relaxed font-mono whitespace-pre-wrap select-all text-[11px]">
+              {certModalTab === 'json' && JSON.stringify(evidenceCoreCert, null, 2)}
+              {certModalTab === 'markdown' && serializeToMarkdown(evidenceCoreCert)}
+              {certModalTab === 'intake' && (
+                <div className="space-y-3 font-mono text-[11px] text-slate-300 select-text">
+                  <div className="p-3 bg-black/60 rounded border border-purple-900/60 space-y-1">
+                    <span className="text-purple-300 font-bold">1. DOWNSTREAM INTAKE VIA EVIDENCE CORE (PYTHON):</span>
+                    <pre className="text-emerald-300 text-[10px] overflow-x-auto select-all">
+{`from tools.evidence_core.evidence_core import EvidenceCore
+
+core = EvidenceCore(case_dir="./cases/${evidenceCoreCert.case_id}")
+
+# Intake the draft artifact exported from AETHER-0
+artifact_path = core.intake("${formatEvidenceCoreFilename(evidenceCoreCert.case_id, evidenceCoreCert.utc_timestamp, evidenceCoreCert.version, 'json')}")`}
+                    </pre>
+                  </div>
+
+                  <div className="p-3 bg-black/60 rounded border border-amber-900/60 space-y-1">
+                    <span className="text-amber-300 font-bold">2. MANDATORY HUMAN APPROVAL GATE:</span>
+                    <p className="text-[10px] text-slate-400">
+                      Per GROUNDING.md, AETHER-0 emits artifacts as draft. A human must explicitly approve before any AI agent (Forensic Dossier, MindPal) may cite it:
+                    </p>
+                    <pre className="text-cyan-300 text-[10px] overflow-x-auto select-all">
+{`core.set_approval("${formatEvidenceCoreFilename(evidenceCoreCert.case_id, evidenceCoreCert.utc_timestamp, evidenceCoreCert.version, 'json')}", "approved")`}
+                    </pre>
+                  </div>
+
+                  <div className="p-3 bg-black/60 rounded border border-slate-800 space-y-1">
+                    <span className="text-slate-300 font-bold">3. GROUNDING.md COMPLIANCE:</span>
+                    <p className="text-[10px] text-slate-400">
+                      Agents must mark any unapproved or ungrounded facts strictly as <strong className="text-rose-400">[UNREFERENCED]</strong>.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between pt-4 mt-3 border-t border-slate-800 gap-2">
+              <span className="text-slate-400 text-[10px]">
+                Contract compliant with tools/evidence-core/GROUNDING.md
+              </span>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => {
+                    const content =
+                      certModalTab === 'markdown'
+                        ? serializeToMarkdown(evidenceCoreCert)
+                        : JSON.stringify(evidenceCoreCert, null, 2);
+                    navigator.clipboard.writeText(content);
+                    setCopiedArtifact(true);
+                    setTimeout(() => setCopiedArtifact(false), 2500);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors cursor-pointer"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{copiedArtifact ? 'COPIED TO CLIPBOARD' : 'COPY ARTIFACT'}</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    const filename = formatEvidenceCoreFilename(
+                      evidenceCoreCert.case_id,
+                      evidenceCoreCert.utc_timestamp,
+                      evidenceCoreCert.version,
+                      'json'
+                    );
+                    downloadArtifactFile(JSON.stringify(evidenceCoreCert, null, 2), filename, 'application/json');
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-purple-950 border border-purple-700 text-purple-200 hover:bg-purple-900 transition-colors cursor-pointer font-semibold"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>DOWNLOAD .JSON</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    const filename = formatEvidenceCoreFilename(
+                      evidenceCoreCert.case_id,
+                      evidenceCoreCert.utc_timestamp,
+                      evidenceCoreCert.version,
+                      'md'
+                    );
+                    downloadArtifactFile(serializeToMarkdown(evidenceCoreCert), filename, 'text/markdown');
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 transition-colors cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>DOWNLOAD .MD</span>
+                </button>
+
+                <button
+                  onClick={() => setShowEvidenceCoreModal(false)}
+                  className="px-3 py-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
