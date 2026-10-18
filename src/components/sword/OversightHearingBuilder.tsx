@@ -14,7 +14,7 @@ export const OversightHearingBuilder: React.FC = () => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
   const onePagerText = `CONGRESSIONAL COMMITTEE ONE-PAGE EXECUTIVE BRIEFING
-SUBJECT: Dismantling Coerced Defaults & Procedural Lawlessness via Model Statute § 402-A
+SUBJECT: Dismantling Coerced Defaults & Procedural Lawlessness (Proposed Statutory Safe Harbor)
 COMMITTEE JURISDICTION: House & Senate Judiciary Committees / Subcommittee on the Constitution
 --------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ procedural defaults. Because automated court portals conflate electronic transmi
 the court clerk automatically issues default judgments, transfer of child custody, and civil contempt warrants
 against the very victim being sabotaged.
 
-THE LEGISLATIVE REMEDY: THE REBUTTABLE PRESUMPTION OF COERCED COMPLIANCE ACT (§ 402-A)
+THE LEGISLATIVE PROPOSAL: THE REBUTTABLE PRESUMPTION OF COERCED COMPLIANCE ACT (LEGISLATIVE REFORM DRAFT)
 1. MANDATORY BURDEN-SHIFTING (§ 101): Shifts the evidentiary burden from the survivor to the accuser.
    Upon prima facie showing of a Coerced Compliance Delta (carrier fraud ticket or SHA-256 event ledger),
    the court must presume the failure to appear was involuntary.
@@ -62,7 +62,7 @@ terrified parent does not appear 24 hours later, the court enters an automated d
 custody, and issues a bench warrant. The victim walks into the courtroom days later, not as a citizen seeking
 justice, but as a criminalized defendant in contempt of court. This is not procedural efficiency. It is procedural lawlessness.
 
-Model Bill § 402-A establishes two indispensable structural firewalls:
+This proposed legislative safe harbor establishes two indispensable structural firewalls:
 First, a Rebuttable Presumption of Coerced Compliance that shifts the burden of proof back where it belongs.
 If a survivor demonstrates a documented technological lockout, the law presumes the absence of willful default.
 Second, an Archival Record Firewall that bars judicial actors from pulling stale, decades-old sealed files

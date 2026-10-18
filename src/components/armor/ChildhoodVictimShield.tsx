@@ -377,7 +377,7 @@ ${parentName}
           }`}
         >
           <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-          <span>Legislative Policy (Model Bill § 206)</span>
+          <span>Legislative Policy Proposal (§ 206 Reform)</span>
         </button>
       </div>
 

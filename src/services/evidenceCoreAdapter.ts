@@ -90,23 +90,8 @@ export async function computeSha256Hex(content: string): Promise<string> {
     const nodeCrypto = await import('node:crypto');
     return nodeCrypto.createHash('sha256').update(content).digest('hex');
   } catch {
-    // Pure JS fallback if crypto is unavailable (e.g. edge test runners)
-    return simpleSha256Fallback(content);
+    throw new Error('Cryptographic environment unavailable: SHA-256 requires WebCrypto or node:crypto.');
   }
-}
-
-/**
- * Deterministic fallback hash for restricted environments
- */
-function simpleSha256Fallback(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  const hex = Math.abs(hash).toString(16).padStart(8, '0');
-  return (hex + hex + hex + hex + hex + hex + hex + hex).substring(0, 64);
 }
 
 /**

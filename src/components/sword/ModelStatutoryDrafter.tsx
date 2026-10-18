@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const ModelStatutoryDrafter: React.FC = () => {
-  const [selectedBillId, setSelectedBillId] = useState<string>('REBUTTABLE_PRESUMPTION_ACT');
+  const [selectedBillId, setSelectedBillId] = useState<string>('FLORIDA_UCCJEA_CH61');
   const [bills, setBills] = useState<ModelStatutoryBill[]>(MODEL_STATUTORY_BILLS);
   const [copiedText, setCopiedText] = useState(false);
 
@@ -88,10 +88,10 @@ export const ModelStatutoryDrafter: React.FC = () => {
         <div>
           <h2 className="text-sm font-semibold tracking-wide text-slate-100 flex items-center gap-2">
             <FileText className="w-4 h-4 text-cyan-400" />
-            <span>Model Statutory Safe-Harbor Drafter & Bill Compiler</span>
+            <span>Enacted Binding Statutory Authority & Clause Compiler</span>
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Model statutory text establishing mandatory burden-shifting presumptions, archival due process firewalls, and agency civil liability.
+            Verified enacted statutory frameworks (Fla. Stat. Ch. 61 UCCJEA, Nev. Rev. Stat. Ch. 125A, Hague Art. 13b, 7 FAM 1700, FUFTA, SSA Title XVI) for court pleading integration.
           </p>
         </div>
 
@@ -100,7 +100,7 @@ export const ModelStatutoryDrafter: React.FC = () => {
           className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono font-medium text-slate-900 bg-cyan-400 hover:bg-cyan-300 transition-colors cursor-pointer"
         >
           <Copy className="w-3.5 h-3.5" />
-          <span>{copiedText ? 'COPIED BILL TO CLIPBOARD' : 'COPY FULL STATUTORY TEXT'}</span>
+          <span>{copiedText ? 'COPIED TO CLIPBOARD' : 'COPY FULL STATUTORY TEXT'}</span>
         </button>
       </div>
 

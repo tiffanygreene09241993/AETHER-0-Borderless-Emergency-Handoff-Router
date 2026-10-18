@@ -17,7 +17,7 @@ export function hex2buf(hex: string): Uint8Array {
   const cleanHex = hex.replace(/[^0-9a-fA-F]/g, '');
   const bytes = new Uint8Array(Math.floor(cleanHex.length / 2));
   for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(cleanHex.substr(i * 2, 2), 16);
+    bytes[i] = parseInt(cleanHex.substring(i * 2, i * 2 + 2), 16);
   }
   return bytes;
 }

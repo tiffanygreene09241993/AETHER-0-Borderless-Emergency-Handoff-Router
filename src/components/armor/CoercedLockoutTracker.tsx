@@ -136,7 +136,7 @@ export const CoercedLockoutTracker: React.FC = () => {
             <span className="text-emerald-400 font-bold text-lg">
               MANDATORY VACATUR
             </span>
-            <span className="text-slate-400 block text-[10px]">Under § 102 of Model Act, default is void</span>
+            <span className="text-slate-400 block text-[10px]">Under UCCJEA § 208 & Due Process (Mullane), default is void</span>
           </div>
         </div>
 

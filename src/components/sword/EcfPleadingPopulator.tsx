@@ -111,7 +111,7 @@ const JURISDICTION_PRESETS: Record<JurisdictionCode, JurisdictionPreset> = {
   FEDERAL: {
     code: 'FEDERAL',
     name: 'United States District Court (Fed. R. Civ. P. 7, 10, 11 / 28 U.S.C. § 1746 / 42 U.S.C. § 1983)',
-    statutoryRuleCitation: 'Fed. R. Civ. P. 7, 10, 11 · 28 U.S.C. § 1746 · 42 U.S.C. § 1983 · 18 U.S.C. § 2703 · Model § 601',
+    statutoryRuleCitation: 'Fed. R. Civ. P. 7, 10, 11 · 28 U.S.C. § 1746 · 42 U.S.C. § 1983 · 18 U.S.C. § 2703',
     defaultCourt: 'UNITED STATES DISTRICT COURT FOR THE CENTRAL DISTRICT OF CALIFORNIA',
     defaultDivision: 'WESTERN DIVISION - CIVIL DOCKET',
     caseNumberPrefix: 'Civil Action No. 2:26-cv-04912-AETHER',
@@ -363,28 +363,28 @@ ${petitionerName}, Custodial Parent & Beneficiary Guardian
     let bodyParagraphs: string[] = [];
 
     if (pleadingType === 'VACATE_DEFAULT') {
-      title = 'MOTION FOR EMERGENCY STAY OF PROCEEDINGS AND VACATUR OF DEFAULT (§ 102)';
+      title = 'EMERGENCY MOTION FOR STAY OF PROCEEDINGS AND VACATUR OF DEFAULT (DUE PROCESS & RULE 1.540(b) / FRCP 60(b))';
       bodyParagraphs = [
         `   COMES NOW Petitioner, ${petitionerName}, appearing specially to move this Court`,
         `for an emergency stay of proceedings and immediate vacatur of ex-parte default orders:`,
-        `   1. STATUTORY VACATUR UNDER MODEL ACT § 102: Under Section 102 of the Model`,
-        `Rebuttable Presumption of Coerced Compliance Act, any default judgment, custody`,
-        `transfer, or bench warrant entered during an active Coerced Compliance Delta is VOID`,
-        `and vacated as a matter of law upon prima facie showing of technological severance.`,
+        `   1. CONSTITUTIONAL DEFECT & VOID DEFAULT: Under the Fourteenth Amendment Due Process`,
+        `Clause (Mullane v. Central Hanover Bank, 339 U.S. 306) and Fla. R. Civ. P. 1.540(b)(4) / Fed. R. Civ. P.`,
+        `60(b)(4), any default decree entered without notice reasonably calculated to reach the party is void ab initio.`,
         `   2. DOCUMENTED TELECOMMUNICATIONS LOCKOUT: From ${lockoutStart}`,
         `through ${lockoutEnd}, Petitioner was subjected to a documented technological lockout`,
         `(unauthorized carrier port-out and MFA hijack) lasting ${lockoutHours} hours with zero notice.`,
-        `   3. DEFECTIVE EX-PARTE SERVICE: Notice of the emergency hearing was dispatched`,
-        `exclusively to the hijacked cellular number and compromised accounts during the lockout.`,
-        `   4. REBUTTABLE PRESUMPTION: Under Section 101, the evidentiary burden shifts entirely`,
-        `to Respondent to disprove duress by clear, cogent, and convincing independent proof.`,
+        `   3. DEFECTIVE EX-PARTE SERVICE & UNJUSTIFIABLE CONDUCT: Notice of the emergency hearing was dispatched`,
+        `exclusively to the hijacked cellular number and compromised accounts during the lockout, constituting`,
+        `unjustifiable misconduct under UCCJEA § 208 (Fla. Stat. § 61.521 / NRS 125A.375).`,
+        `   4. FRAUD ON THE COURT & EXCUSABLE NEGLECT: Under Fla. R. Civ. P. 1.540(b)(1),(3) / FRCP 60(b)(1),(3),`,
+        `procuring an ex-parte order through manufactured technological blackout mandates immediate vacatur.`,
         `   5. SELF-AUTHENTICATING EXHIBIT A: Attached hereto is an immutable cryptographic`,
         `event ledger certified under Fed. R. Evid. 902(13) & 902(14) establishing chain-of-custody.`,
         `   6. CARRIER SUBPOENA EXHIBIT B: Attached hereto is a formal 18 U.S.C. § 2703(f)`,
         `preservation demand compelling ${carrierName} to preserve carrier call audio and CDRs.`,
         `   WHEREFORE, Petitioner respectfully prays for an Order: (a) immediately staying all`,
         `proceedings; (b) vacating default decrees entered on ${filingDate}; (c) restoring the parental`,
-        `status quo ante; and (d) awarding statutory compensatory attorney fees under Section 102.`,
+        `status quo ante; and (d) awarding attorney fees and costs for bad-faith procedural ambush.`,
         `///`,
         `///`,
         `///`,
@@ -495,14 +495,16 @@ ${petitionerName}, Custodial Parent & Beneficiary Guardian
         `discovery and produced inside thirty (30) days of trial, violating discovery rules and CCP § 2034.`,
         `   3. INADMISSIBLE HEARSAY-WITHIN-HEARSAY: The purported archives consist of multi-layered`,
         `unsworn anonymous hotline notes and caseworker impressions lacking business-record foundation.`,
-        `   4. NICHOLSON V. SCOPPETTA & § 204 IMMUNITY: State law and Model Act § 204 prohibit`,
-        `penalizing a victimized domestic violence parent with neglect findings based on witnessed abuse.`,
-        `   5. SECTION 205 LITIGATION SABOTAGE PRESUMPTION: The sudden dredging and deployment`,
-        `of unadjudicated records within 30 days of trial triggers a mandatory presumption of bad faith.`,
-        `   6. MANDATORY IN-CAMERA SCREENING: Under the Archival Due-Process Firewall (§ 201),`,
-        `the Court must conduct an immediate in-camera inspection prior to any judicial or evaluator review.`,
+        `   4. NICHOLSON V. SCOPPETTA PRECEDENT & DV PROTECTIVE STANDARD: Under Nicholson v. Scoppetta,`,
+        `3 N.Y.3d 357 (2004) and Fourteenth Amendment due process, a victimized parent cannot be`,
+        `penalized or deemed neglectful solely for being subjected to domestic violence witnessed by a child.`,
+        `   5. UNTIMELY DISCLOSURE & BAD-FAITH AMBUSH: The sudden dredging and deployment of unadjudicated`,
+        `records within 30 days of trial constitutes procedural ambush warranting exclusion under civil discovery rules.`,
+        `   6. MANDATORY IN-CAMERA SCREENING: Under statutory confidentiality protections (Fla. Stat. §§ 39.0132,`,
+        `39.202 / state equivalents) and Fla. Fam. L. R. P. 12.280(c), this Court must conduct an immediate`,
+        `in-camera inspection prior to any judicial or evaluator review to prevent severe prejudice.`,
         `   WHEREFORE, Petitioner prays for an Order: (a) conducting in-camera inspection; (b) striking`,
-        `all stale unadjudicated records from evidence; and (c) awarding statutory fees under § 205-C.`,
+        `all stale unadjudicated records from evidence; and (c) awarding appropriate fees and costs for bad-faith conduct.`,
         `///`,
         `///`,
         `///`,
@@ -644,14 +646,14 @@ ${petitionerName}, Custodial Parent & Beneficiary Guardian
         `the care, custody, and companionship of her children (Santosky v. Kramer, 455 U.S. 745; Troxel v. Granville).`,
         `   3. WEAPONIZATION OF CHILDHOOD SEXUAL ABUSE: Defendants unlawfully dredged sealed juvenile files`,
         `where Plaintiff was a childhood incest victim, pathologizing survivorship to invent bad-faith unfitness predicates.`,
-        `   4. ASYMMETRIC ENFORCEMENT & DIVERSE WEIGHTS: Defendants imposed crushing 40-hr/wk case plan hurdles`,
-        `on Plaintiff while demanding zero compliance from the primary violent abuser (Model §§ 601, 602 & Title VII).`,
+        `   4. ASYMMETRIC ENFORCEMENT & DUE PROCESS VIOLATION: Defendants imposed crushing 40-hr/wk case plan hurdles`,
+        `on Plaintiff while demanding zero compliance from the primary violent abuser, violating Fourteenth Amendment equal protection and procedural fairness.`,
         `   5. STATE-CREATED DANGER & BAD-FAITH HANDOFF: Under DeShaney / Kennedy, Defendants affirmatively`,
         `created a lethal trap by coercing compliant Plaintiff under threat of termination to hand children to an armed felon.`,
         `   6. COMPLETE STRIPPING OF QUALIFIED IMMUNITY: Defendants acted with malicious, conscience-shocking`,
         `intent, violating clearly established constitutional rights, completely stripping individual qualified immunity.`,
-        `   WHEREFORE, Plaintiff demands: (a) declaratory judgment; (b) $100,000 statutory damages per Model § 601;`,
-        `(c) compensatory damages; (d) punitive damages against named caseworkers; and (e) permanent injunctive relief.`,
+        `   WHEREFORE, Plaintiff demands: (a) declaratory judgment; (b) actual and compensatory damages according to proof under 42 U.S.C. § 1983;`,
+        `(c) punitive damages against named individual caseworkers under Smith v. Wade, 461 U.S. 30; and (d) permanent injunctive relief.`,
         `///`,
         `///`,
       ];
@@ -659,7 +661,7 @@ ${petitionerName}, Custodial Parent & Beneficiary Guardian
 
     const preambleLines = includeNaturalLawPreamble
       ? [
-          `   PREAMBLE OF NATURAL LAW & DUE CONSCIENCE (PSALM 82:3-4 / MODEL TITLE VII):`,
+          `   PREAMBLE OF NATURAL LAW & EQUITABLE CONSCIENCE (PSALM 82:3-4):`,
           `   "Defend the poor and fatherless: do justice to the afflicted and needy. Deliver the poor`,
           `and needy: rid them out of the hand of the wicked." (Psalm 82:3-4). Moving Party appeals to`,
           `the inherent conscience and equitable power of this Court, invoking the foundational mandate`,
@@ -1190,7 +1192,7 @@ DATED: _______________________                 _________________________________
             <div>
               <div className="font-bold text-slate-300">{petitionerName}, Pro Se Litigant in Propria Persona</div>
               <div>Electronic Filing Address: [Designated Confidential Protective Portal]</div>
-              <div>Appearing Specially Pursuant to Statutory Safe-Harbor & Model § 601</div>
+              <div>Appearing Specially Pursuant to Statutory Safe-Harbor & UCCJEA § 208</div>
             </div>
             <div className="text-right text-[10px] text-cyan-400 font-bold">
               {activePreset.statutoryRuleCitation}

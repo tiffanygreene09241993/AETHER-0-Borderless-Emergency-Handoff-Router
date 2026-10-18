@@ -36,14 +36,14 @@ export const SovereignSwordCommand: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Dismantling algorithmic victim-criminalization: Model burden-shifting legislation, archival record firewalls, and ECF court pleadings.
+              Verified statutory defense suite: Enacted interstate safe harbors, procedural due process firewalls, and formal court pleadings.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
           <span>STATUTORY FRAMEWORK: </span>
-          <span className="text-cyan-300 font-bold">REBUTTABLE PRESUMPTION § 402-A</span>
+          <span className="text-cyan-300 font-bold">UCCJEA · PKPA · 42 U.S.C. § 1983</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export const SovereignSwordCommand: React.FC = () => {
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
-          <span>Model Statutory Drafter</span>
+          <span>Enacted Statutory Authorities</span>
         </button>
 
         <button

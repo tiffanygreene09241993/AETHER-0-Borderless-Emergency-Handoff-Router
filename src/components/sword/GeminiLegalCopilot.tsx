@@ -34,7 +34,7 @@ export const GeminiLegalCopilot: React.FC = () => {
     {
       id: '1',
       sender: 'assistant',
-      text: `Greetings. I am your Sovereign Legal Copilot, grounded in the Uniform Child Custody Jurisdiction and Enforcement Act (UCCJEA), Florida FUFTA Ch. 726, Title XVI SSA Clawback regulations, and Model Bills §§ 101–602. How can I assist you with your pleadings, evidence preservation, or jurisdictional defense today?`,
+      text: `Greetings. I am your Sovereign Legal Copilot, grounded in the Uniform Child Custody Jurisdiction and Enforcement Act (UCCJEA), Florida FUFTA Ch. 726, Title XVI SSA Clawback regulations, 42 U.S.C. § 1983 civil rights jurisprudence, and enacted interstate safe harbors. How can I assist you with your pleadings, evidence preservation, or jurisdictional defense today?`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -66,13 +66,13 @@ export const GeminiLegalCopilot: React.FC = () => {
       } else if (lower.includes('ssa') || lower.includes('payee') || lower.includes('ssi') || lower.includes('disability')) {
         responseText = `Under 42 U.S.C. § 1383a and 20 C.F.R. § 416.641, an adverse party who falsely claims representative payee status while the child resides with you commits federal benefit fraud. Assemble three certified proof schedules: Schedule A (IRS Form 1040 tax transcripts claiming dependent status); Schedule B (Public school district IEP/504 special education residency records); and Schedule C (Pediatric clinic & hospital specialty intakes). Submit this petition directly to the SSA Field Office Manager and the SSA OIG Fraud Division demanding clawback and reissuance.`;
       } else if (lower.includes('1983') || lower.includes('qualified immunity') || lower.includes('civil rights') || lower.includes('cps') || lower.includes('dcf')) {
-        responseText = `Under 42 U.S.C. § 1983 and the Fourteenth Amendment Due Process Clause (Santosky v. Kramer, 455 U.S. 745; Troxel v. Granville, 530 U.S. 57), parents hold a fundamental liberty interest in familial integrity. Under Nicholson v. Scoppetta, 3 N.Y.3d 357, and Model Bill § 601, caseworkers who unseal confidential childhood sexual assault records or coerce a compliant mother into contact with an armed felon create an unconstitutional State-Created Danger (DeShaney / Kennedy doctrine) and forfeit qualified immunity, exposing them to $100,000 statutory liquidated damages and punitive liability.`;
+        responseText = `Under 42 U.S.C. § 1983 and the Fourteenth Amendment Due Process Clause (Santosky v. Kramer, 455 U.S. 745; Troxel v. Granville, 530 U.S. 57), parents hold a fundamental liberty interest in familial integrity. Under the State-Created Danger doctrine (DeShaney / Kennedy doctrine), caseworkers who unlawfully unseal confidential childhood sexual assault records or affirmatively coerce a compliant mother into contact with a known violent felon violate clearly established constitutional rights and forfeit qualified immunity, exposing them to compensatory and punitive damages under Smith v. Wade, 461 U.S. 30.`;
       } else if (lower.includes('duress') || lower.includes('necessity') || lower.includes('alienation')) {
-        responseText = `Under Model Bill § 602 (The Protective Parental Duress & Necessity Shield Act), protective necessity is an absolute defense in all dependency and custody proceedings. No absence, flight, or missed court appearance can be deemed unfitness or abandonment if undertaken to escape armed threats or felony violence. Furthermore, the evidentiary burden shifts to the agency to disprove duress beyond a reasonable doubt, and evaluators are strictly barred from leveling 'parental alienation' claims against fleeing survivors.`;
+        responseText = `Under UCCJEA § 208 (Fla. Stat. § 61.521 / NRS 125A.375), 18 U.S.C. § 2265 (VAWA Full Faith and Credit), and established common-law necessity, protective flight to escape immediate felony domestic violence or armed threats does not constitute unfitness, abandonment, or unjustifiable conduct. The court must recognize protective necessity, refuse foreign jurisdiction procured through abuser misconduct, and exclude bad-faith claims of 'parental alienation' leveled against fleeing survivors.`;
       } else {
-        responseText = `Under foundational equity, Model Title VII, and the U.S. Constitution:
-1. Procedural Due Process (14th Amendment): Default judgments entered during communication severance are void ab initio.
-2. Equal Measures (Proverbs 20:23 / Title VII): Administrative agencies cannot enforce hyper-technical perfectionism against pro se trauma survivors while granting leniency to evasive abusers.
+        responseText = `Under procedural due process and the U.S. Constitution:
+1. Procedural Due Process (14th Amendment): Default judgments entered during communication severance or without constitutionally adequate notice (Mullane) are void ab initio.
+2. Equal Protection & Substantive Fairness: Administrative agencies cannot enforce hyper-technical procedural defaults against pro se trauma survivors facing coercive control while excusing jurisdictional misconduct by the adverse party.
 3. Cryptographic Chain of Custody (FRE 902(13)/(14)): Always attach your pre-certified SHA-256 event log (Exhibit A) and biometric hardware seal to verify that your emergency filings are authentic and tamper-free.`;
       }
 
@@ -197,10 +197,10 @@ export const GeminiLegalCopilot: React.FC = () => {
               SSA Payee Clawback
             </button>
             <button
-              onClick={() => handleSendMessage('How does Model Bill § 601 abrogate qualified immunity for state-created danger?')}
+              onClick={() => handleSendMessage('How does state-created danger overcome qualified immunity under 42 U.S.C. § 1983?')}
               className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-rose-300 hover:bg-slate-800"
             >
-              Model § 601 Civil Rights
+              42 U.S.C. § 1983 Civil Rights
             </button>
           </div>
 
