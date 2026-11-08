@@ -2,6 +2,11 @@
 
 A mission-critical, zero-retention emergency telemetry and handoff router engineered for protective parents, domestic violence survivors, and individuals facing cross-border abandonment or jurisdictional warfare.
 
+## Documentation
+- Live site: https://aether-0.lovable.app
+- Dual-Clock Timestamps: https://aether-0.lovable.app/docs/dual-clock-timestamps
+- FRE 902(13) vs 902(14): https://aether-0.lovable.app/docs/fre-902-13-vs-14
+
 ---
 
 ## Key Features
